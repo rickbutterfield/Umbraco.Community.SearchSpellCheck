@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33020.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{520F52E8-5C5A-406F-BD3D-E77E49A421DC}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\.github\README.md = ..\.github\README.md
+		..\umbraco-marketplace.json = ..\umbraco-marketplace.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck", "Umbraco.Community.SearchSpellCheck\Umbraco.Community.SearchSpellCheck.csproj", "{24624475-727B-4E1D-9C76-C41724A1300D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.13.x", "Umbraco.Community.SearchSpellCheck.TestSite.13.x\Umbraco.Community.SearchSpellCheck.TestSite.13.x.csproj", "{087CE625-A241-43FA-8012-689CB8C68488}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.10.x", "Umbraco.Community.SearchSpellCheck.TestSite.10.x\Umbraco.Community.SearchSpellCheck.TestSite.10.x.csproj", "{86445A64-A7D0-460A-B775-CAB631CC2836}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.11.x", "Umbraco.Community.SearchSpellCheck.TestSite.11.x\Umbraco.Community.SearchSpellCheck.TestSite.11.x.csproj", "{DD2EAEE0-16C3-4843-BD26-722C65A7948C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.12.x", "Umbraco.Community.SearchSpellCheck.TestSite.12.x\Umbraco.Community.SearchSpellCheck.TestSite.12.x.csproj", "{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86445A64-A7D0-460A-B775-CAB631CC2836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86445A64-A7D0-460A-B775-CAB631CC2836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86445A64-A7D0-460A-B775-CAB631CC2836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86445A64-A7D0-460A-B775-CAB631CC2836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F07004F-9903-4AEB-9ED0-BE57A0326D20}
+	EndGlobalSection
+EndGlobal

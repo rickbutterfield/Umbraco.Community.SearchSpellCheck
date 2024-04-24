@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Rick Butterfield",
+      "ImageUrl": "https://github.com/rickbutterfield.png"
+    },
+    "Category": "",
+    "Description": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/issues",
+    "PackageType": "Package",
+    "Tags": [],
+    "Title": "Umbraco.Community.SearchSpellCheck"
+  }
