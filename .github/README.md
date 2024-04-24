@@ -18,7 +18,7 @@ If you put images into /docs/screenshots, then you would reference them in this 
 
 Add the package to an existing Umbraco website (v10.4+) from nuget:
 
-`dotnet add package Umbraco.Community.Umbraco.Community.SearchSpellCheck`
+`dotnet add package Umbraco.Community.SearchSpellCheck`
 
 TODO *provide any other instructions for someone using your package*
 
