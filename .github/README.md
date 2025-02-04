@@ -9,7 +9,7 @@
 This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-erik) who [created a v7 version of this](https://blog.aabech.no/archive/building-a-spell-checker-for-search-in-umbraco/), which a lot of the work is based on.
 
 ## How it works
-![alt text](docs/img/screenshot.png?raw=true "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
+![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/master/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
 
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 

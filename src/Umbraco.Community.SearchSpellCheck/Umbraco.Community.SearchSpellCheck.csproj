@@ -8,11 +8,11 @@
     <Product>Umbraco.Community.SearchSpellCheck</Product>
     <PackageId>Umbraco.Community.SearchSpellCheck</PackageId>
     <Title>Umbraco.Community.SearchSpellCheck</Title>
-    <Description>A Lucene.Net-based spell checker for Umbraco v10+</Description>
+    <Description>A Lucene.Net-based spell checker for Umbraco v13</Description>
     <PackageTags>umbraco;umbraco-marketplace</PackageTags>
     <RootNamespace>Umbraco.Community.SearchSpellCheck</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.0</Version>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
     <Authors>Rick Butterfield</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Rick Butterfield</Copyright>
