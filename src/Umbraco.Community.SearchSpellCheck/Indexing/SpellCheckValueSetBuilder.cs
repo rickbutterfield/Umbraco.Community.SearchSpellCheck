@@ -19,7 +19,6 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             Aliases.TextBox,
             Aliases.TextArea,
             Aliases.TinyMce,
-            Aliases.Grid,
             Aliases.BlockList,
             Aliases.BlockGrid
         };

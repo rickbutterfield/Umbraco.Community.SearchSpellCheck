@@ -45,7 +45,7 @@ The package can be configured in `appsettings.json`
 ### Settings
 `IndexName`: The name of the Lucene index to be created. This is the also name of the folder in the `App_Data` folder that contains the Lucene index. By default it is `SpellCheckIndex` but this can be changed if you need a different naming convention.
 
-`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, TinyMCE, [Grid Layout](https://our.umbraco.com/Documentation/Fundamentals/Backoffice/property-editors/built-in-property-editors/Grid-Layout/) and [Block List Editor](https://our.umbraco.com/Documentation/Fundamentals/Backoffice/property-editors/built-in-property-editors/Block-List-Editor/) fields.
+`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, [Block Grid](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
 
 `BuildOnStartup`: Boolean indicating if you want the index to be populated on startup. Defaults to `true`.
 

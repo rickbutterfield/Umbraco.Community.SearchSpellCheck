@@ -9,7 +9,7 @@
 This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-erik) who [created a v7 version of this](https://blog.aabech.no/archive/building-a-spell-checker-for-search-in-umbraco/), which a lot of the work is based on.
 
 ## How it works
-![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/master/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
+![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/develop/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
 
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 
@@ -45,7 +45,7 @@ The package can be configured in `appsettings.json`
 ### Settings
 `IndexName`: The name of the Lucene index to be created. This is the also name of the folder in the `App_Data` folder that contains the Lucene index. By default it is `SpellCheckIndex` but this can be changed if you need a different naming convention.
 
-`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, TinyMCE, [Grid Layout](https://our.umbraco.com/Documentation/Fundamentals/Backoffice/property-editors/built-in-property-editors/Grid-Layout/) and [Block List Editor](https://our.umbraco.com/Documentation/Fundamentals/Backoffice/property-editors/built-in-property-editors/Block-List-Editor/) fields.
+`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, [Block Grid](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
 
 `BuildOnStartup`: Boolean indicating if you want the index to be populated on startup. Defaults to `true`.
 
