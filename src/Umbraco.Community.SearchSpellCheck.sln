@@ -14,12 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.13.x", "Umbraco.Community.SearchSpellCheck.TestSite.13.x\Umbraco.Community.SearchSpellCheck.TestSite.13.x.csproj", "{087CE625-A241-43FA-8012-689CB8C68488}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.10.x", "Umbraco.Community.SearchSpellCheck.TestSite.10.x\Umbraco.Community.SearchSpellCheck.TestSite.10.x.csproj", "{86445A64-A7D0-460A-B775-CAB631CC2836}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.11.x", "Umbraco.Community.SearchSpellCheck.TestSite.11.x\Umbraco.Community.SearchSpellCheck.TestSite.11.x.csproj", "{DD2EAEE0-16C3-4843-BD26-722C65A7948C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.12.x", "Umbraco.Community.SearchSpellCheck.TestSite.12.x\Umbraco.Community.SearchSpellCheck.TestSite.12.x.csproj", "{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,18 +28,6 @@ Global
 		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86445A64-A7D0-460A-B775-CAB631CC2836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86445A64-A7D0-460A-B775-CAB631CC2836}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86445A64-A7D0-460A-B775-CAB631CC2836}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86445A64-A7D0-460A-B775-CAB631CC2836}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD2EAEE0-16C3-4843-BD26-722C65A7948C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3E56BB7-48AD-47D2-9E2A-E1052B1AC63C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,6 @@ using Lucene.Net.Store;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Extensions;
-using Umbraco.Cms.Core.Hosting;
 using Umbraco.Community.SearchSpellCheck.Interfaces;
 using Umbraco.Community.SearchSpellCheck.Models;
 

@@ -8,6 +8,7 @@ using Umbraco.Cms.Core.Strings;
 using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Extensions;
 using Umbraco.Cms.Core.Services;
+using static Umbraco.Cms.Core.Constants.PropertyEditors;
 
 namespace Umbraco.Community.SearchSpellCheck.Indexing
 {
@@ -15,11 +16,12 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
     {
         private string[] SUPPORTED_FIELDS = new string[]
         {
-            Cms.Core.Constants.PropertyEditors.Aliases.TextBox,
-            Cms.Core.Constants.PropertyEditors.Aliases.TextArea,
-            Cms.Core.Constants.PropertyEditors.Aliases.TinyMce,
-            Cms.Core.Constants.PropertyEditors.Aliases.Grid,
-            Cms.Core.Constants.PropertyEditors.Aliases.BlockList
+            Aliases.TextBox,
+            Aliases.TextArea,
+            Aliases.TinyMce,
+            Aliases.Grid,
+            Aliases.BlockList,
+            Aliases.BlockGrid
         };
 
         private readonly UrlSegmentProviderCollection _urlSegmentProviders;
@@ -149,12 +151,12 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             foreach (var property in properties)
             {
                 var editor = _propertyEditors[property.PropertyType.PropertyEditorAlias];
-#if NET6_0 || NET7_0
-                var indexVals = editor?.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true);
-#endif
-#if NET8_0
                 var indexVals = editor?.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true, availableCultures, contentTypeDictionary);
-#endif
+
+                if (property.PropertyType.PropertyEditorAlias == Aliases.BlockGrid || property.PropertyType.PropertyEditorAlias == Aliases.BlockList)
+                {
+                    _ = indexVals;
+                }
 
                 if (indexVals != null)
                 {
