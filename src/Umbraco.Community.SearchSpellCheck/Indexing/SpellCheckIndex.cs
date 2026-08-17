@@ -28,8 +28,6 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             IRuntimeState runtimeState)
             : base(loggerFactory, name, indexOptions, hostingEnvironment, runtimeState)
         {
-            loggerFactory.CreateLogger<SpellCheckIndex>();
-
             LuceneDirectoryIndexOptions namedOptions = indexOptions.Get(name);
             if (namedOptions == null)
             {

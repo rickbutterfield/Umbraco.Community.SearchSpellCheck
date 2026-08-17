@@ -1,4 +1,5 @@
 using Examine;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
@@ -22,7 +23,8 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
         private readonly IExamineManager _examineManager;
         private readonly IContentService _contentService;
         private readonly SpellCheckValueSetBuilder _spellCheckValueSetBuilder;
-        private readonly SpellCheckOptions _spellCheckOptions;
+        private readonly IOptionsMonitor<SpellCheckOptions> _optionsMonitor;
+        private readonly ILogger<RebuildOnPublishHandler> _logger;
 
         public RebuildOnPublishHandler(
             IRuntimeState runtimeState,
@@ -30,15 +32,16 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
             IExamineManager examineManager,
             IContentService contentService,
             SpellCheckValueSetBuilder spellCheckValueSetBuilder,
-            IOptionsMonitor<SpellCheckOptions> optionsMonitor)
+            IOptionsMonitor<SpellCheckOptions> optionsMonitor,
+            ILogger<RebuildOnPublishHandler> logger)
         {
             _runtimeState = runtimeState;
             _umbracoIndexingHandler = umbracoIndexingHandler;
             _examineManager = examineManager;
             _contentService = contentService;
             _spellCheckValueSetBuilder = spellCheckValueSetBuilder;
-
-            _spellCheckOptions = optionsMonitor.CurrentValue;
+            _optionsMonitor = optionsMonitor;
+            _logger = logger;
         }
 
         /// <summary>
@@ -51,9 +54,16 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
                 return;
             }
 
-            if (!_examineManager.TryGetIndex(_spellCheckOptions.IndexName, out IIndex? index))
+            var indexName = _optionsMonitor.CurrentValue.IndexName;
+
+            if (!_examineManager.TryGetIndex(indexName, out IIndex? index))
             {
-                throw new InvalidOperationException("Could not obtain the spell check index");
+                // Previously this threw. It runs inside a publish, so a missing or misnamed index took the
+                // editor's publish down with it rather than just leaving suggestions stale.
+                _logger.LogWarning(
+                    "Spell check index {IndexName} was not found, so it has not been updated for this change.",
+                    indexName);
+                return;
             }
 
             ContentCacheRefresher.JsonPayload[] payloads = GetNotificationPayloads(notification);
@@ -98,7 +108,7 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
                 return true;
             }
 
-            if (_spellCheckOptions.RebuildOnPublish == false)
+            if (_optionsMonitor.CurrentValue.RebuildOnPublish == false)
             {
                 return true;
             }
