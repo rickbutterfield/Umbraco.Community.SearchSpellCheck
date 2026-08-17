@@ -1,13 +1,11 @@
 using Examine;
-using Microsoft.Extensions.Options;
-using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Examine;
 
 namespace Umbraco.Community.SearchSpellCheck.Indexing
 {
-    public class SpellCheckIndexPopulator : IndexPopulator<IUmbracoContentIndex>
+    public class SpellCheckIndexPopulator : IndexPopulator<IUmbracoIndex>
     {
         private readonly SpellCheckValueSetBuilder _spellCheckValueSetBuilder;
         private readonly IContentService _contentService;
@@ -19,6 +17,17 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             _spellCheckValueSetBuilder = spellCheckValueSetBuilder;
             _contentService = contentService;
         }
+
+        /// <summary>
+        ///     Claims only the spell check index.
+        /// </summary>
+        /// <remarks>
+        ///     <see cref="IndexPopulator{TIndex}" /> registers a populator against <em>every</em> index assignable to
+        ///     <typeparamref name="TIndex" /> unless this is overridden. Without it, rebuilding Umbraco's own
+        ///     ExternalIndex or InternalIndex from the backoffice would fill them with spell check documents, which
+        ///     carry only <c>word</c>, <c>id</c>, <c>nodeName</c> and <c>urlName</c> and would replace the real ones.
+        /// </remarks>
+        public override bool IsRegistered(IUmbracoIndex index) => index is SpellCheckIndex;
 
         protected override void PopulateIndexes(IReadOnlyList<IIndex> indexes)
         {
