@@ -15,15 +15,18 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
-  
+        dotnet-version: 8.0.x
+
+    - name: Test
+      run: dotnet test src\Umbraco.Community.SearchSpellCheck.Tests\Umbraco.Community.SearchSpellCheck.Tests.csproj --configuration Release
+
     - name: Build project
       run: dotnet build src\Umbraco.Community.SearchSpellCheck\Umbraco.Community.SearchSpellCheck.csproj --configuration Release
 
     - name: Push to NuGet
-      run: dotnet nuget push **\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push src\Umbraco.Community.SearchSpellCheck\bin\Release\*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate

@@ -1,0 +1,44 @@
+name: CI
+
+# Builds and tests the package on every push and pull request.
+# Kept separate from the SonarQube workflow so that pull requests from forks,
+# which cannot read the SONAR_TOKEN secret, still get a build signal.
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore src/Umbraco.Community.SearchSpellCheck.sln
+
+      - name: Build
+        run: dotnet build src/Umbraco.Community.SearchSpellCheck.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test src/Umbraco.Community.SearchSpellCheck.Tests/Umbraco.Community.SearchSpellCheck.Tests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/test-results.trx'
+          if-no-files-found: ignore
