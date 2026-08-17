@@ -72,7 +72,10 @@
                     else
                     {
                         var suggestion = _suggestionService.GetSuggestion(searchQuery, suggestionAccuracy: 0.5f);
-                        <p>Did you mean <a href="?q=@suggestion">@suggestion</a>?</p>
+                        @if (!string.IsNullOrEmpty(suggestion))
+                        {
+                            <p>Did you mean <a href="?q=@suggestion">@suggestion</a>?</p>
+                        }
                     }
                 }
             </div>

@@ -89,6 +89,15 @@ And then returned in the view:
 }
 ```
 
+### What `GetSuggestion` returns
+`GetSuggestion` returns an **empty string when it has no correction to offer**, so the `if (!string.IsNullOrEmpty(...))` check above does the right thing. It previously echoed the search term back unchanged, which made that check always true and showed visitors "Did you mean *&lt;exactly what you typed&gt;*?".
+
+Words it has no suggestion for are kept as the visitor typed them. Only the words it can improve are replaced.
+
+`suggestionAccuracy` is a score between 0 and 1. A candidate scores 85% on how closely it resembles the typed word, using the average of the Jaro-Winkler, Levenshtein and n-gram distances, and 15% on how often the candidate appears in your content. Frequency only separates candidates that are otherwise equally close.
+
+If you need the individual candidates and their scores, use `GetSuggestions`, which returns a scored list, best first.
+
 ## License
 Copyright &copy; 2021-2025 [Rick Butterfield](https://rickbutterfield.com), and other contributors
 
