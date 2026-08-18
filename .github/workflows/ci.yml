@@ -1,8 +1,7 @@
 name: CI
 
 # Builds and tests the package on every push and pull request.
-# Kept separate from the SonarQube workflow so that pull requests from forks,
-# which cannot read the SONAR_TOKEN secret, still get a build signal.
+# Requires no secrets, so pull requests from forks get a build signal too.
 
 on:
   push:
