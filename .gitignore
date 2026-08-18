@@ -354,3 +354,13 @@ MigrationBackup/
 
 # Rider
 src/.idea
+
+# Umbraco local site data. The test site installs itself unattended on first run,
+# so none of this belongs in the repository. The SQLite database in particular
+# holds the backoffice user table.
+**/umbraco/Data/*.sqlite.db
+**/umbraco/Data/*.sqlite.db-shm
+**/umbraco/Data/*.sqlite.db-wal
+**/umbraco/Data/TEMP/
+**/umbraco/Logs/
+**/umbraco/mediacache/

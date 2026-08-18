@@ -9,7 +9,6 @@ using Umbraco.Community.SearchSpellCheck.Indexing;
 using Umbraco.Community.SearchSpellCheck.Interfaces;
 using Umbraco.Community.SearchSpellCheck.NotificationHandlers;
 using Umbraco.Community.SearchSpellCheck.Services;
-using Umbraco.Community.Umbraco.Community.SearchSpellCheck;
 
 namespace Umbraco.Community.SearchSpellCheck
 {

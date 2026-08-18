@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
@@ -9,22 +10,25 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
 {
     public class BuildOnStartupHandler : INotificationHandler<UmbracoRequestBeginNotification>
     {
-        private static bool _isReady;
-        private static bool _isReadSet;
-        private static object? _isReadyLock;
+        private static bool _hasRebuilt;
+        private static bool _hasRebuiltInitialised;
+        private static object? _hasRebuiltLock;
+
         private readonly IRuntimeState _runtimeState;
         private readonly IIndexRebuilder _indexRebuilder;
-        private readonly SpellCheckOptions _spellCheckOptions;
+        private readonly IOptionsMonitor<SpellCheckOptions> _optionsMonitor;
+        private readonly ILogger<BuildOnStartupHandler> _logger;
 
         public BuildOnStartupHandler(
             IIndexRebuilder indexRebuilder,
             IRuntimeState runtimeState,
-            IOptionsMonitor<SpellCheckOptions> optionsMonitor)
+            IOptionsMonitor<SpellCheckOptions> optionsMonitor,
+            ILogger<BuildOnStartupHandler> logger)
         {
             _indexRebuilder = indexRebuilder;
             _runtimeState = runtimeState;
-
-            _spellCheckOptions = optionsMonitor.CurrentValue;
+            _optionsMonitor = optionsMonitor;
+            _logger = logger;
         }
 
         public void Handle(UmbracoRequestBeginNotification notification)
@@ -34,22 +38,42 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
                 return;
             }
 
-            if (_spellCheckOptions.BuildOnStartup)
-            {
-                LazyInitializer.EnsureInitialized(
-                    ref _isReady,
-                    ref _isReadSet,
-                    ref _isReadyLock,
-                    () =>
-                    {
-                        if (_indexRebuilder.CanRebuild(_spellCheckOptions.IndexName))
-                        {
-                            _indexRebuilder.RebuildIndex(_spellCheckOptions.IndexName);
-                        }
+            SpellCheckOptions options = _optionsMonitor.CurrentValue;
 
-                        return true;
-                    });
+            if (options.BuildOnStartup == false)
+            {
+                return;
             }
+
+            // Runs once per application lifetime, on whichever request gets here first.
+            LazyInitializer.EnsureInitialized(
+                ref _hasRebuilt,
+                ref _hasRebuiltInitialised,
+                ref _hasRebuiltLock,
+                () =>
+                {
+                    try
+                    {
+                        if (_indexRebuilder.CanRebuild(options.IndexName))
+                        {
+                            _indexRebuilder.RebuildIndex(options.IndexName);
+                        }
+                        else
+                        {
+                            _logger.LogWarning(
+                                "Spell check index {IndexName} cannot be rebuilt, so it has not been populated on startup.",
+                                options.IndexName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // This runs on the first request to reach it. Letting it escape would fail that request
+                        // for a reason the visitor has nothing to do with.
+                        _logger.LogError(ex, "Failed to build the spell check index {IndexName} on startup.", options.IndexName);
+                    }
+
+                    return true;
+                });
         }
     }
 }
