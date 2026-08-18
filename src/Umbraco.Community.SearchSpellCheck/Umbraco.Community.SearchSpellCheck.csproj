@@ -24,6 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Umbraco.Community.SearchSpellCheck.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00017" />
     <PackageReference Include="Lucene.Net.Suggest" Version="4.8.0-beta00017" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0, 14.0.0)" />

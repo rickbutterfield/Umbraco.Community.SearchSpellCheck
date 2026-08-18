@@ -14,20 +14,54 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.13.x", "Umbraco.Community.SearchSpellCheck.TestSite.13.x\Umbraco.Community.SearchSpellCheck.TestSite.13.x.csproj", "{087CE625-A241-43FA-8012-689CB8C68488}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.SearchSpellCheck.Tests", "Umbraco.Community.SearchSpellCheck.Tests\Umbraco.Community.SearchSpellCheck.Tests.csproj", "{270DA291-5B35-4FAE-88BA-9B84975A0E08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|x64.Build.0 = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Debug|x86.Build.0 = Debug|Any CPU
 		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|x64.ActiveCfg = Release|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|x64.Build.0 = Release|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|x86.ActiveCfg = Release|Any CPU
+		{24624475-727B-4E1D-9C76-C41724A1300D}.Release|x86.Build.0 = Release|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|x64.Build.0 = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Debug|x86.Build.0 = Debug|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{087CE625-A241-43FA-8012-689CB8C68488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|x64.ActiveCfg = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|x64.Build.0 = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|x86.ActiveCfg = Release|Any CPU
+		{087CE625-A241-43FA-8012-689CB8C68488}.Release|x86.Build.0 = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|x64.Build.0 = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Debug|x86.Build.0 = Debug|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|x64.ActiveCfg = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|x64.Build.0 = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|x86.ActiveCfg = Release|Any CPU
+		{270DA291-5B35-4FAE-88BA-9B84975A0E08}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
