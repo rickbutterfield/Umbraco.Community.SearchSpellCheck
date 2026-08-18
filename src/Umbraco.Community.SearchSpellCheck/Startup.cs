@@ -36,6 +36,7 @@ namespace Umbraco.Community.SearchSpellCheck
             builder.Services.AddSingleton<IIndexPopulator, SpellCheckIndexPopulator>();
 
             // Services
+            builder.Services.AddSingleton<ILuceneReaderAccessor, ExamineLuceneReaderAccessor>();
             builder.Services.AddSingleton<ISuggestionService, SuggestionService>();
         }
     }
