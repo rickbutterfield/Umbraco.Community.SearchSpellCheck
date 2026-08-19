@@ -56,7 +56,15 @@ namespace Umbraco.Community.SearchSpellCheck.NotificationHandlers
                     {
                         if (_indexRebuilder.CanRebuild(options.IndexName))
                         {
-                            _indexRebuilder.RebuildIndex(options.IndexName);
+                            // Handle is a synchronous notification member, so the rebuild is fired without
+                            // awaiting it. Any failure is observed and logged here instead of becoming an
+                            // unobserved task exception.
+                            _indexRebuilder.RebuildIndexAsync(options.IndexName).ContinueWith(
+                                t => _logger.LogError(
+                                    t.Exception,
+                                    "Failed to build the spell check index {IndexName} on startup.",
+                                    options.IndexName),
+                                TaskContinuationOptions.OnlyOnFaulted);
                         }
                         else
                         {

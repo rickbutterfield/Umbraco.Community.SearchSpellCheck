@@ -77,7 +77,7 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             udi.Setup(x => x.ToString()).Returns("umb://document/2b7f9b1f9a1c4c8f9a1c4c8f9a1c4c8f");
 
             ValueSet valueSet = BuildSingleValueSet(
-                editorAlias: Aliases.TinyMce,
+                editorAlias: Aliases.RichText,
                 indexValues: new Dictionary<string, IEnumerable<object?>>
                 {
                     [PropertyAlias] = new object?[] { "alpha", "umb://media/abc", udi.Object }
@@ -199,15 +199,11 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
                     It.IsAny<bool>(),
                     It.IsAny<IEnumerable<string>>(),
                     It.IsAny<IDictionary<Guid, IContentType>>()))
-                .Returns(indexValues);
+                .Returns(indexValues.Select(kv => new IndexValue { Culture = null, FieldName = kv.Key, Values = kv.Value }));
 
             var editor = new Mock<IDataEditor>();
             editor.SetupGet(x => x.Alias).Returns(editorAlias);
             editor.SetupGet(x => x.PropertyIndexValueFactory).Returns(indexValueFactory.Object);
-
-            // PropertyEditorCollection filters on (x.Type & EditorType.PropertyValue) > 0, so an editor that does
-            // not declare this is silently dropped from the collection.
-            editor.SetupGet(x => x.Type).Returns(EditorType.PropertyValue);
 
             var propertyEditors = new PropertyEditorCollection(new DataEditorCollection(() => new[] { editor.Object }));
 
@@ -223,8 +219,8 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             var contentTypeService = new Mock<IContentTypeService>();
             contentTypeService.Setup(x => x.GetAll()).Returns(Array.Empty<IContentType>());
 
-            var localizationService = new Mock<ILocalizationService>();
-            localizationService.Setup(x => x.GetDefaultLanguageIsoCode()).Returns("en-US");
+            var languageService = new Mock<ILanguageService>();
+            languageService.Setup(x => x.GetDefaultIsoCodeAsync()).ReturnsAsync("en-US");
 
             return new SpellCheckValueSetBuilder(
                 Mock.Of<IOptionsMonitor<SpellCheckOptions>>(x => x.CurrentValue == options),
@@ -233,7 +229,7 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
                 Mock.Of<IShortStringHelper>(),
                 propertyEditors,
                 contentTypeService.Object,
-                localizationService.Object);
+                languageService.Object);
         }
 
         private static IContent CreateContent(string editorAlias)
