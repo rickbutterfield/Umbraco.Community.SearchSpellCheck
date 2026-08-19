@@ -1,6 +1,6 @@
 # SearchSpellCheck
 
-[![Platform](https://img.shields.io/badge/Umbraco-13-%233544B1?style=flat&logo=umbraco)](https://umbraco.com/products/umbraco-cms/)
+[![Platform](https://img.shields.io/badge/Umbraco-17-%233544B1?style=flat&logo=umbraco)](https://umbraco.com/products/umbraco-cms/)
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.SearchSpellCheck?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck)
 [![GitHub](https://img.shields.io/github/license/rickbutterfield/Umbraco.Community.SearchSpellCheck?color=8AB803)](../LICENSE)
 
@@ -14,7 +14,7 @@ This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-e
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 
 ## Installation
-The Umbraco v13 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck).
+The Umbraco v17 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck). For Umbraco 13, use the `v13/main` branch instead.
 
 To install the package, you can use either .NET CLI:
 
@@ -45,7 +45,7 @@ The package can be configured in `appsettings.json`
 ### Settings
 `IndexName`: The name of the Lucene index to be created. This is also the name of the folder holding the index files, which Umbraco places under `umbraco/Data/TEMP/ExamineIndexes` by default. The exact location depends on your `Umbraco:CMS:Examine:LuceneDirectoryFactory` setting, so the package asks Examine where the index is rather than assuming a path. By default the name is `SpellCheckIndex` but this can be changed if you need a different naming convention.
 
-`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, [Block Grid](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/13.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
+`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, Rich Text Editor, [Block Grid](https://docs.umbraco.com/umbraco-cms/17.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/17.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
 
 `BuildOnStartup`: Boolean indicating if you want the index to be populated on startup. Defaults to `true`.
 

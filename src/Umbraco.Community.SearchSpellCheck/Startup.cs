@@ -16,8 +16,6 @@ namespace Umbraco.Community.SearchSpellCheck
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.ManifestFilters().Append<SearchSpellCheckManifestFilter>();
-
             // Configuration
             builder.Services.Configure<SpellCheckOptions>(builder.Config.GetSection(Constants.Configuration.ConfigurationSection));
             var options = builder.Config.GetSection(Constants.Configuration.ConfigurationSection).Get<SpellCheckOptions>() ?? new SpellCheckOptions();

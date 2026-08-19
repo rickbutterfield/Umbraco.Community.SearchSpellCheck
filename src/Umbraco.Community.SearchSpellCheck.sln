@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck", "Umbraco.Community.SearchSpellCheck\Umbraco.Community.SearchSpellCheck.csproj", "{24624475-727B-4E1D-9C76-C41724A1300D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite.13.x", "Umbraco.Community.SearchSpellCheck.TestSite.13.x\Umbraco.Community.SearchSpellCheck.TestSite.13.x.csproj", "{087CE625-A241-43FA-8012-689CB8C68488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Community.SearchSpellCheck.TestSite", "Umbraco.Community.SearchSpellCheck.TestSite\Umbraco.Community.SearchSpellCheck.TestSite.csproj", "{087CE625-A241-43FA-8012-689CB8C68488}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.SearchSpellCheck.Tests", "Umbraco.Community.SearchSpellCheck.Tests\Umbraco.Community.SearchSpellCheck.Tests.csproj", "{270DA291-5B35-4FAE-88BA-9B84975A0E08}"
 EndProject
