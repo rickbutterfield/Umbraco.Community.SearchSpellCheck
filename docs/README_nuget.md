@@ -14,7 +14,7 @@ This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-e
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 
 ## Installation
-The Umbraco v17 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck). For Umbraco 13, use the `v13/main` branch instead.
+The Umbraco v17 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck). It requires Umbraco 17.8.1 or later (.NET 10). For Umbraco 13, use the `v13/main` branch instead.
 
 To install the package, you can use either .NET CLI:
 
