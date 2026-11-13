@@ -20,7 +20,7 @@ set up or log in to. Previously a SQLite database was committed for convenience,
 backoffice user table with it, so it has been removed.
 
 ```
-dotnet run --project src/Umbraco.Community.SearchSpellCheck.TestSite.13.x
+dotnet run --project src/Umbraco.Community.SearchSpellCheck.TestSite
 ```
 
 On first run Umbraco performs an unattended install using the credentials in
@@ -34,20 +34,20 @@ On first run Umbraco performs an unattended install using the credentials in
 These are local development credentials for a throwaway site. Do not reuse them anywhere real, and
 do not point the test site at a database you care about.
 
-The site starts empty. To exercise the spell checker you will need some content with text in it:
+The site ships with the [Clean starter kit](https://marketplace.umbraco.com/package/clean), so the
+first unattended install also creates and publishes a set of pages the templates already understand,
+and the `SpellCheckIndex` is built from them about a minute after start-up. To try the spell checker:
 
 1. Log in to `/umbraco`.
-2. Create a document type with a textstring, textarea, Block List or Block Grid property. Those are
-   the four editors the package reads words from.
-3. Add the property alias to `SearchSpellCheck:IndexedFields` in `appsettings.Development.json`.
-4. Create and publish a page or two.
-5. The `SpellCheckIndex` rebuilds on publish. You can also rebuild it from **Settings → Examine
-   Management**.
-6. Search from the site's search page and misspell something.
+2. Check `SearchSpellCheck:IndexedFields` in `appsettings.Development.json` lists the aliases of the
+   properties you want words from. Textstring, textarea, Rich Text Editor, Block List and Block Grid
+   properties are read.
+3. Create and publish a page, or edit one. The `SpellCheckIndex` updates on publish. You can also
+   rebuild it from **Settings → Examine Management**.
+4. Search from the site's search page and misspell something. The "Did you mean" suggestion on the
+   no-results page comes from this package.
 
-If you would rather start from a fuller site, the views in the test site were written against the
-[Clean starter kit](https://marketplace.umbraco.com/package/clean), so installing that package gives
-you content the existing templates already understand.
+Note that backoffice login needs HTTPS, so use the `https` URL from the launch profile.
 
 ## Raising changes
 
