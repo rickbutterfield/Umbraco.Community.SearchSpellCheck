@@ -216,6 +216,37 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             Assert.That(validator.Validate(valueSet).Status, Is.EqualTo(expected));
         }
 
+        [Test]
+        public void Validator_Removes_The_Values_Of_An_Unpublished_Culture()
+        {
+            // The varies-by-culture marker has to be a plain "y". Written as an array inside the dictionary it was
+            // wrapped, the validator's check never matched, and the unpublished culture's words stayed indexed.
+            var indexValues = new Dictionary<string, IEnumerable<object?>> { [PropertyAlias] = new object?[] { "alpha" } };
+            IContent content = CreateContent(Aliases.TextBox);
+            var variantType = new Mock<ISimpleContentType>();
+            variantType.SetupGet(x => x.Alias).Returns("testPage");
+            variantType.SetupGet(x => x.Variations).Returns(ContentVariation.Culture);
+            Mock.Get(content).SetupGet(x => x.ContentType).Returns(variantType.Object);
+            Mock.Get(content).SetupGet(x => x.AvailableCultures).Returns(new[] { "en-US", "da-DK" });
+            Mock.Get(content).Setup(x => x.IsCulturePublished("en-US")).Returns(true);
+            Mock.Get(content).Setup(x => x.IsCulturePublished("da-DK")).Returns(false);
+            Mock.Get(content).Setup(x => x.GetPublishName(It.IsAny<string?>())).Returns("Name");
+
+            ValueSet valueSet = CreateBuilder(Aliases.TextBox, indexValues, null).GetValueSets(content).Single();
+            Assert.That(valueSet.Values.Keys, Does.Contain("word_da-dk").And.Contain("nodeName_da-dk"));
+
+            var validator = new ContentValueSetValidator(true, false, Mock.Of<IPublicAccessService>(), Mock.Of<IScopeProvider>());
+            ValueSetValidationResult result = validator.Validate(valueSet);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Status, Is.EqualTo(ValueSetValidationStatus.Valid));
+                Assert.That(result.ValueSet.Values.Keys, Does.Contain("word_en-us").And.Contain("nodeName_en-us"));
+                Assert.That(result.ValueSet.Values.Keys, Does.Not.Contain("word_da-dk"));
+                Assert.That(result.ValueSet.Values.Keys, Does.Not.Contain("nodeName_da-dk"));
+            });
+        }
+
         #region Scaffolding
 
         private static ValueSet BuildSingleValueSet(

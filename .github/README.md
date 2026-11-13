@@ -19,13 +19,13 @@ The Umbraco v17 version of this package is [available via NuGet](https://www.nug
 To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Umbraco.Community.SearchSpellCheck --version 1.0.0-alpha
+dotnet add package Umbraco.Community.SearchSpellCheck --version 17.0.0-alpha
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Umbraco.Community.SearchSpellCheck -Version 1.0.0-alpha
+Install-Package Umbraco.Community.SearchSpellCheck -Version 17.0.0-alpha
 ```
 
 ## Configuration

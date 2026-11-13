@@ -86,15 +86,16 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                     [UmbracoExamineFieldNames.NodeNameFieldName] = c.PublishName ?? c.Name ?? string.Empty,
                     ["urlName"] = c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders) ?? string.Empty,
                     // The index validator is Umbraco's published content validator. It fails every value set that
-                    // has no "published" or "path" field, so without these the index stays empty. Together they also
-                    // keep unpublished and recycle bin content out of the dictionary.
+                    // has no "published" or "path" field, so without these the index stays empty. "published" keeps
+                    // unpublished content out, and the validator and SpellCheckIndex use "path" to filter out the
+                    // recycle bin and protected content, deleting anything already indexed.
                     [UmbracoExamineFieldNames.PublishedFieldName] = c.Published ? "y" : "n",
                     ["path"] = c.Path
                 };
 
                 if (isVariant)
                 {
-                    indexValues[UmbracoExamineFieldNames.VariesByCultureFieldName] = new object[] { "y" };
+                    indexValues[UmbracoExamineFieldNames.VariesByCultureFieldName] = "y";
 
                     foreach (var culture in c.AvailableCultures)
                     {

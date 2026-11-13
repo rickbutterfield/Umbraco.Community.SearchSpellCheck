@@ -1,5 +1,6 @@
 using Examine;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Persistence.Querying;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Examine;
 
@@ -32,18 +33,36 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
         protected override void PopulateIndexes(IReadOnlyList<IIndex> indexes)
         {
             IContent[] content;
-            long totalRecords = 0;
-            int rootNode = -1;
             int pageIndex = 0;
             int pageSize = 500;
 
+            // Items are read shallowest first, so a parent has always been seen before its children. Something is
+            // indexed only when it is published and so is everything above it, like the CMS's published content
+            // populator. Walking from the root also reads the recycle bin, whose items have a parent of -20 and so
+            // never count as live.
+            var live = new HashSet<int>();
+
             do
             {
-                content = _contentService.GetPagedDescendants(rootNode, pageIndex, pageSize, out totalRecords).ToArray();
+                content = _contentService
+                    .GetPagedDescendants(Cms.Core.Constants.System.Root, pageIndex, pageSize, out _, ordering: Ordering.By("Path"))
+                    .ToArray();
 
-                if (content.Length > 0)
+                var liveContent = new List<IContent>();
+                foreach (IContent item in content)
                 {
-                    var valueSets = _spellCheckValueSetBuilder.GetValueSets(content).ToList();
+                    if (item.Published
+                        && !item.Trashed
+                        && (item.ParentId == Cms.Core.Constants.System.Root || live.Contains(item.ParentId)))
+                    {
+                        live.Add(item.Id);
+                        liveContent.Add(item);
+                    }
+                }
+
+                if (liveContent.Count > 0)
+                {
+                    var valueSets = _spellCheckValueSetBuilder.GetValueSets(liveContent.ToArray()).ToList();
 
                     foreach (var index in indexes)
                     {

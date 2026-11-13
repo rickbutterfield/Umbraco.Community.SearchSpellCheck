@@ -13,12 +13,21 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             // Renaming it silently breaks every stored index, so pin the literal here.
             FieldDefinition[] definitions = SpellCheckIndexFieldDefinitionCollection.SpellCheckIndexFieldDefinitions;
 
-            Assert.That(definitions, Has.Length.EqualTo(1));
-            Assert.Multiple(() =>
-            {
-                Assert.That(definitions[0].Name, Is.EqualTo("word"));
-                Assert.That(definitions[0].Type, Is.EqualTo(FieldDefinitionTypes.FullText));
-            });
+            FieldDefinition word = definitions.Single(x => x.Name == "word");
+
+            Assert.That(word.Type, Is.EqualTo(FieldDefinitionTypes.FullText));
+        }
+
+        [Test]
+        public void Defines_The_Path_Field_As_Raw()
+        {
+            // SpellCheckIndex finds the descendants of a deleted item with a wildcard query on the path. A
+            // tokenized path would split on the commas and the query would match nothing.
+            FieldDefinition[] definitions = SpellCheckIndexFieldDefinitionCollection.SpellCheckIndexFieldDefinitions;
+
+            FieldDefinition path = definitions.Single(x => x.Name == "__Path");
+
+            Assert.That(path.Type, Is.EqualTo(FieldDefinitionTypes.Raw));
         }
 
         [Test]
