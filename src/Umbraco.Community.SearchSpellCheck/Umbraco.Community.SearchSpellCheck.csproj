@@ -30,7 +30,7 @@
   <ItemGroup>
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00018" />
     <PackageReference Include="Lucene.Net.Suggest" Version="4.8.0-beta00018" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.8.1, 18.0.0)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[18.3.1, 19.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
