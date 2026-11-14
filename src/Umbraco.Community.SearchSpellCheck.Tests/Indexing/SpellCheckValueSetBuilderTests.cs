@@ -4,8 +4,10 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
+using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Community.SearchSpellCheck.Indexing;
 using static Umbraco.Cms.Core.Constants.PropertyEditors;
 
@@ -77,7 +79,7 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             udi.Setup(x => x.ToString()).Returns("umb://document/2b7f9b1f9a1c4c8f9a1c4c8f9a1c4c8f");
 
             ValueSet valueSet = BuildSingleValueSet(
-                editorAlias: Aliases.TinyMce,
+                editorAlias: Aliases.RichText,
                 indexValues: new Dictionary<string, IEnumerable<object?>>
                 {
                     [PropertyAlias] = new object?[] { "alpha", "umb://media/abc", udi.Object }
@@ -174,15 +176,87 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             });
         }
 
+        [TestCase(true, "y")]
+        [TestCase(false, "n")]
+        public void Writes_Whether_The_Content_Is_Published(bool published, string expected)
+        {
+            ValueSet valueSet = BuildSingleValueSet(
+                editorAlias: Aliases.TextBox,
+                indexValues: new Dictionary<string, IEnumerable<object?>>
+                {
+                    [PropertyAlias] = new object?[] { "alpha" }
+                },
+                published: published);
+
+            Assert.That(valueSet.Values[UmbracoExamineFieldNames.PublishedFieldName].Single(), Is.EqualTo(expected));
+        }
+
+        [TestCase(true, ValueSetValidationStatus.Valid)]
+        [TestCase(false, ValueSetValidationStatus.Failed)]
+        public void Passes_Umbracos_Published_Content_Validator_Only_When_Published(
+            bool published,
+            ValueSetValidationStatus expected)
+        {
+            // The regression: the index uses GetPublishedContentValueSetValidator, which fails any content value set
+            // without a "published" field, so the index stayed empty on every Umbraco version.
+            ValueSet valueSet = BuildSingleValueSet(
+                editorAlias: Aliases.TextBox,
+                indexValues: new Dictionary<string, IEnumerable<object?>>
+                {
+                    [PropertyAlias] = new object?[] { "alpha" }
+                },
+                published: published);
+
+            var validator = new ContentValueSetValidator(
+                true,
+                false,
+                Mock.Of<IPublicAccessService>(),
+                Mock.Of<IScopeProvider>());
+
+            Assert.That(validator.Validate(valueSet).Status, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Validator_Removes_The_Values_Of_An_Unpublished_Culture()
+        {
+            // The varies-by-culture marker has to be a plain "y". Written as an array inside the dictionary it was
+            // wrapped, the validator's check never matched, and the unpublished culture's words stayed indexed.
+            var indexValues = new Dictionary<string, IEnumerable<object?>> { [PropertyAlias] = new object?[] { "alpha" } };
+            IContent content = CreateContent(Aliases.TextBox);
+            var variantType = new Mock<ISimpleContentType>();
+            variantType.SetupGet(x => x.Alias).Returns("testPage");
+            variantType.SetupGet(x => x.Variations).Returns(ContentVariation.Culture);
+            Mock.Get(content).SetupGet(x => x.ContentType).Returns(variantType.Object);
+            Mock.Get(content).SetupGet(x => x.AvailableCultures).Returns(new[] { "en-US", "da-DK" });
+            Mock.Get(content).Setup(x => x.IsCulturePublished("en-US")).Returns(true);
+            Mock.Get(content).Setup(x => x.IsCulturePublished("da-DK")).Returns(false);
+            Mock.Get(content).Setup(x => x.GetPublishName(It.IsAny<string?>())).Returns("Name");
+
+            ValueSet valueSet = CreateBuilder(Aliases.TextBox, indexValues, null).GetValueSets(content).Single();
+            Assert.That(valueSet.Values.Keys, Does.Contain("word_da-dk").And.Contain("nodeName_da-dk"));
+
+            var validator = new ContentValueSetValidator(true, false, Mock.Of<IPublicAccessService>(), Mock.Of<IScopeProvider>());
+            ValueSetValidationResult result = validator.Validate(valueSet);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Status, Is.EqualTo(ValueSetValidationStatus.Valid));
+                Assert.That(result.ValueSet.Values.Keys, Does.Contain("word_en-us").And.Contain("nodeName_en-us"));
+                Assert.That(result.ValueSet.Values.Keys, Does.Not.Contain("word_da-dk"));
+                Assert.That(result.ValueSet.Values.Keys, Does.Not.Contain("nodeName_da-dk"));
+            });
+        }
+
         #region Scaffolding
 
         private static ValueSet BuildSingleValueSet(
             string editorAlias,
             Dictionary<string, IEnumerable<object?>> indexValues,
-            List<string>? configuredFields = null)
+            List<string>? configuredFields = null,
+            bool published = true)
         {
             SpellCheckValueSetBuilder builder = CreateBuilder(editorAlias, indexValues, configuredFields);
-            return builder.GetValueSets(CreateContent(editorAlias)).Single();
+            return builder.GetValueSets(CreateContent(editorAlias, published)).Single();
         }
 
         private static SpellCheckValueSetBuilder CreateBuilder(
@@ -199,15 +273,11 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
                     It.IsAny<bool>(),
                     It.IsAny<IEnumerable<string>>(),
                     It.IsAny<IDictionary<Guid, IContentType>>()))
-                .Returns(indexValues);
+                .Returns(indexValues.Select(kv => new IndexValue { Culture = null, FieldName = kv.Key, Values = kv.Value }));
 
             var editor = new Mock<IDataEditor>();
             editor.SetupGet(x => x.Alias).Returns(editorAlias);
             editor.SetupGet(x => x.PropertyIndexValueFactory).Returns(indexValueFactory.Object);
-
-            // PropertyEditorCollection filters on (x.Type & EditorType.PropertyValue) > 0, so an editor that does
-            // not declare this is silently dropped from the collection.
-            editor.SetupGet(x => x.Type).Returns(EditorType.PropertyValue);
 
             var propertyEditors = new PropertyEditorCollection(new DataEditorCollection(() => new[] { editor.Object }));
 
@@ -223,8 +293,8 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             var contentTypeService = new Mock<IContentTypeService>();
             contentTypeService.Setup(x => x.GetAll()).Returns(Array.Empty<IContentType>());
 
-            var localizationService = new Mock<ILocalizationService>();
-            localizationService.Setup(x => x.GetDefaultLanguageIsoCode()).Returns("en-US");
+            var languageService = new Mock<ILanguageService>();
+            languageService.Setup(x => x.GetDefaultIsoCodeAsync()).ReturnsAsync("en-US");
 
             return new SpellCheckValueSetBuilder(
                 Mock.Of<IOptionsMonitor<SpellCheckOptions>>(x => x.CurrentValue == options),
@@ -233,10 +303,10 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
                 Mock.Of<IShortStringHelper>(),
                 propertyEditors,
                 contentTypeService.Object,
-                localizationService.Object);
+                languageService.Object);
         }
 
-        private static IContent CreateContent(string editorAlias)
+        private static IContent CreateContent(string editorAlias, bool published = true)
         {
             var propertyType = new Mock<IPropertyType>();
             propertyType.SetupGet(x => x.PropertyEditorAlias).Returns(editorAlias);
@@ -255,6 +325,8 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             content.SetupGet(x => x.Key).Returns(Guid.Parse("11111111-1111-1111-1111-111111111111"));
             content.SetupGet(x => x.Name).Returns("Test page");
             content.SetupGet(x => x.PublishName).Returns("Test page");
+            content.SetupGet(x => x.Published).Returns(published);
+            content.SetupGet(x => x.Path).Returns("-1,1234");
             content.SetupGet(x => x.ContentType).Returns(contentType.Object);
             content.SetupGet(x => x.AvailableCultures).Returns(Array.Empty<string>());
             content.SetupGet(x => x.Properties).Returns(new PropertyCollection(new[] { property.Object }));

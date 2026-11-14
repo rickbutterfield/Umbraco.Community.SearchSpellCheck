@@ -21,7 +21,7 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
         {
             Aliases.TextBox,
             Aliases.TextArea,
-            Aliases.TinyMce,
+            Aliases.RichText,
             Aliases.BlockList,
             Aliases.BlockGrid
         };
@@ -31,8 +31,9 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
         private readonly IOptionsMonitor<SpellCheckOptions> _options;
         private readonly IShortStringHelper _shortStringHelper;
         private readonly IContentTypeService _contentTypeService;
-        private readonly ILocalizationService _localizationService;
+        private readonly ILanguageService _languageService;
         private readonly ILogger<SpellCheckValueSetBuilder> _logger;
+        private string? _defaultIsoCode;
 
         public SpellCheckValueSetBuilder(
             IOptionsMonitor<SpellCheckOptions> options,
@@ -41,7 +42,7 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             IShortStringHelper shortStringHelper,
             PropertyEditorCollection propertyEditors,
             IContentTypeService contentTypeService,
-            ILocalizationService localizationService)
+            ILanguageService languageService)
             : base(propertyEditors, true)
         {
             // Held as the monitor rather than a snapshot of CurrentValue. This is a singleton, so freezing the
@@ -53,7 +54,7 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
             _shortStringHelper = shortStringHelper;
             _propertyEditors = propertyEditors;
             _contentTypeService = contentTypeService;
-            _localizationService = localizationService;
+            _languageService = languageService;
         }
 
         /// <inheritdoc />
@@ -73,7 +74,7 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                 var availableCultures = new List<string>(c.AvailableCultures);
                 if (availableCultures.Any() is false)
                 {
-                    availableCultures.Add(_localizationService.GetDefaultLanguageIsoCode());
+                    availableCultures.Add(GetDefaultIsoCode());
                 }
 
                 List<IProperty> properties = SelectProperties(c, options);
@@ -83,12 +84,18 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                     ["id"] = c.Id,
                     [UmbracoExamineFieldNames.NodeKeyFieldName] = c.Key,
                     [UmbracoExamineFieldNames.NodeNameFieldName] = c.PublishName ?? c.Name ?? string.Empty,
-                    ["urlName"] = c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders) ?? string.Empty
+                    ["urlName"] = c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders) ?? string.Empty,
+                    // The index validator is Umbraco's published content validator. It fails every value set that
+                    // has no "published" or "path" field, so without these the index stays empty. "published" keeps
+                    // unpublished content out, and the validator and SpellCheckIndex use "path" to filter out the
+                    // recycle bin and protected content, deleting anything already indexed.
+                    [UmbracoExamineFieldNames.PublishedFieldName] = c.Published ? "y" : "n",
+                    ["path"] = c.Path
                 };
 
                 if (isVariant)
                 {
-                    indexValues[UmbracoExamineFieldNames.VariesByCultureFieldName] = new object[] { "y" };
+                    indexValues[UmbracoExamineFieldNames.VariesByCultureFieldName] = "y";
 
                     foreach (var culture in c.AvailableCultures)
                     {
@@ -97,6 +104,8 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                         // Umbraco does the same.
                         var lowerCulture = culture.ToLowerInvariant();
 
+                        indexValues[$"{UmbracoExamineFieldNames.PublishedFieldName}_{lowerCulture}"] =
+                            c.IsCulturePublished(culture) ? "y" : "n";
                         indexValues[$"urlName_{lowerCulture}"] =
                             c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders, culture) ?? string.Empty;
                         indexValues[$"{UmbracoExamineFieldNames.NodeNameFieldName}_{lowerCulture}"] =
@@ -154,6 +163,18 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
         }
 
         /// <summary>
+        ///     The site's default language ISO code, cached after first use.
+        /// </summary>
+        /// <remarks>
+        ///     <see cref="IValueSetBuilder{T}.GetValueSets" /> is a synchronous interface member, but
+        ///     <see cref="ILanguageService" /> only exposes this asynchronously. The default language does not
+        ///     change during the process lifetime, so caching after one blocking call is preferable to blocking on
+        ///     every content item indexed.
+        /// </remarks>
+        private string GetDefaultIsoCode()
+            => _defaultIsoCode ??= _languageService.GetDefaultIsoCodeAsync().GetAwaiter().GetResult();
+
+        /// <summary>
         ///     Collects every distinct word-bearing value from <paramref name="properties" />.
         /// </summary>
         /// <remarks>
@@ -181,22 +202,17 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                     continue;
                 }
 
-                IEnumerable<KeyValuePair<string, IEnumerable<object?>>>? indexValues = editor.PropertyIndexValueFactory
+                IEnumerable<IndexValue> indexValues = editor.PropertyIndexValueFactory
                     .GetIndexValues(property, culture, null, PublishedValuesOnly, availableCultures, contentTypeDictionary);
 
-                if (indexValues is null)
+                foreach (IndexValue indexValue in indexValues)
                 {
-                    continue;
-                }
-
-                foreach (KeyValuePair<string, IEnumerable<object?>> keyVal in indexValues)
-                {
-                    if (keyVal.Key.IsNullOrWhiteSpace())
+                    if (indexValue.FieldName.IsNullOrWhiteSpace())
                     {
                         continue;
                     }
 
-                    foreach (var value in keyVal.Value)
+                    foreach (var value in indexValue.Values)
                     {
                         var text = value?.ToString();
 
