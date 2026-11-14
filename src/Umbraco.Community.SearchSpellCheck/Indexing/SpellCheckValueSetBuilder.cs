@@ -83,7 +83,12 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                     ["id"] = c.Id,
                     [UmbracoExamineFieldNames.NodeKeyFieldName] = c.Key,
                     [UmbracoExamineFieldNames.NodeNameFieldName] = c.PublishName ?? c.Name ?? string.Empty,
-                    ["urlName"] = c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders) ?? string.Empty
+                    ["urlName"] = c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders) ?? string.Empty,
+                    // The index validator is Umbraco's published content validator. It fails every value set that
+                    // has no "published" or "path" field, so without these the index stays empty. Together they also
+                    // keep unpublished and recycle bin content out of the dictionary.
+                    [UmbracoExamineFieldNames.PublishedFieldName] = c.Published ? "y" : "n",
+                    ["path"] = c.Path
                 };
 
                 if (isVariant)
@@ -97,6 +102,8 @@ namespace Umbraco.Community.SearchSpellCheck.Indexing
                         // Umbraco does the same.
                         var lowerCulture = culture.ToLowerInvariant();
 
+                        indexValues[$"{UmbracoExamineFieldNames.PublishedFieldName}_{lowerCulture}"] =
+                            c.IsCulturePublished(culture) ? "y" : "n";
                         indexValues[$"urlName_{lowerCulture}"] =
                             c.GetUrlSegment(_shortStringHelper, _urlSegmentProviders, culture) ?? string.Empty;
                         indexValues[$"{UmbracoExamineFieldNames.NodeNameFieldName}_{lowerCulture}"] =

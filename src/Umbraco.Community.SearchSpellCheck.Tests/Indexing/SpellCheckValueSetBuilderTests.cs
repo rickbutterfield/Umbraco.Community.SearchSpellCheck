@@ -6,6 +6,7 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
+using Umbraco.Cms.Infrastructure.Examine;
 using Umbraco.Community.SearchSpellCheck.Indexing;
 using static Umbraco.Cms.Core.Constants.PropertyEditors;
 
@@ -174,15 +175,54 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             });
         }
 
+        [TestCase(true, "y")]
+        [TestCase(false, "n")]
+        public void Writes_Whether_The_Content_Is_Published(bool published, string expected)
+        {
+            ValueSet valueSet = BuildSingleValueSet(
+                editorAlias: Aliases.TextBox,
+                indexValues: new Dictionary<string, IEnumerable<object?>>
+                {
+                    [PropertyAlias] = new object?[] { "alpha" }
+                },
+                published: published);
+
+            Assert.That(valueSet.Values[UmbracoExamineFieldNames.PublishedFieldName].Single(), Is.EqualTo(expected));
+        }
+
+        [TestCase(true, ValueSetValidationStatus.Valid)]
+        [TestCase(false, ValueSetValidationStatus.Failed)]
+        public void Passes_Umbracos_Published_Content_Validator_Only_When_Published(
+            bool published,
+            ValueSetValidationStatus expected)
+        {
+            // The regression: the index uses GetPublishedContentValueSetValidator, which fails any content value set
+            // without a "published" field, so the index stayed empty on every Umbraco version.
+            ValueSet valueSet = BuildSingleValueSet(
+                editorAlias: Aliases.TextBox,
+                indexValues: new Dictionary<string, IEnumerable<object?>>
+                {
+                    [PropertyAlias] = new object?[] { "alpha" }
+                },
+                published: published);
+
+            // v13 only has obsolete overloads that take an IScopeProvider, so use the one meant for tests. It is
+            // the published-values-only validator with protected content supported, which is what this checks.
+            var validator = new ContentValueSetValidator(true);
+
+            Assert.That(validator.Validate(valueSet).Status, Is.EqualTo(expected));
+        }
+
         #region Scaffolding
 
         private static ValueSet BuildSingleValueSet(
             string editorAlias,
             Dictionary<string, IEnumerable<object?>> indexValues,
-            List<string>? configuredFields = null)
+            List<string>? configuredFields = null,
+            bool published = true)
         {
             SpellCheckValueSetBuilder builder = CreateBuilder(editorAlias, indexValues, configuredFields);
-            return builder.GetValueSets(CreateContent(editorAlias)).Single();
+            return builder.GetValueSets(CreateContent(editorAlias, published)).Single();
         }
 
         private static SpellCheckValueSetBuilder CreateBuilder(
@@ -236,7 +276,7 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
                 localizationService.Object);
         }
 
-        private static IContent CreateContent(string editorAlias)
+        private static IContent CreateContent(string editorAlias, bool published = true)
         {
             var propertyType = new Mock<IPropertyType>();
             propertyType.SetupGet(x => x.PropertyEditorAlias).Returns(editorAlias);
@@ -255,6 +295,8 @@ namespace Umbraco.Community.SearchSpellCheck.Tests.Indexing
             content.SetupGet(x => x.Key).Returns(Guid.Parse("11111111-1111-1111-1111-111111111111"));
             content.SetupGet(x => x.Name).Returns("Test page");
             content.SetupGet(x => x.PublishName).Returns("Test page");
+            content.SetupGet(x => x.Published).Returns(published);
+            content.SetupGet(x => x.Path).Returns("-1,1234");
             content.SetupGet(x => x.ContentType).Returns(contentType.Object);
             content.SetupGet(x => x.AvailableCultures).Returns(Array.Empty<string>());
             content.SetupGet(x => x.Properties).Returns(new PropertyCollection(new[] { property.Object }));
