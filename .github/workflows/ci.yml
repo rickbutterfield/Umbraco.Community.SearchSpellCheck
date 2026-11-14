@@ -6,8 +6,8 @@ name: CI
 on:
   push:
     branches:
-      - develop
-      - main
+      - "v*/dev"
+      - "v*/main"
   pull_request:
     types: [opened, synchronize, reopened]
 

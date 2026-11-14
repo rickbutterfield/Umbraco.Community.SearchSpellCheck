@@ -2,14 +2,14 @@
 
 [![Platform](https://img.shields.io/badge/Umbraco-17-%233544B1?style=flat&logo=umbraco)](https://umbraco.com/products/umbraco-cms/)
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.SearchSpellCheck?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck)
-[![GitHub](https://img.shields.io/github/license/rickbutterfield/Umbraco.Community.SearchSpellCheck?color=8AB803)](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/develop/LICENSE)
+[![GitHub](https://img.shields.io/github/license/rickbutterfield/Umbraco.Community.SearchSpellCheck?color=8AB803)](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v17/dev/LICENSE)
 
 ## A Lucene.Net-based spell checker for Umbraco
 
 This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-erik) who [created a v7 version of this](https://blog.aabech.no/archive/building-a-spell-checker-for-search-in-umbraco/), which a lot of the work is based on.
 
 ## How it works
-![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/develop/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
+![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/v17/dev/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
 
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 
@@ -101,4 +101,4 @@ If you need the individual candidates and their scores, use `GetSuggestions`, wh
 ## License
 Copyright &copy; 2021-2025 [Rick Butterfield](https://rickbutterfield.com), and other contributors
 
-Licensed under the [MIT License](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/develop/LICENSE).
+Licensed under the [MIT License](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v17/dev/LICENSE).
