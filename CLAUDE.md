@@ -12,8 +12,8 @@ from the previous major's `dev`.
 | Line | Integration branch | Release branch | Phase |
 |---|---|---|---|
 | Umbraco 13 | `v13/dev` | `v13/main` | Security fixes only, until Umbraco 13 reaches end of life in mid December 2026 |
-| Umbraco 17 | `v17/dev` | `v17/main` | Active. The v17 port is in PR #8 |
-| Umbraco 18 | `v18/dev` | `v18/main` | Active, not started. Umbraco 18 is stable. Run `major-upgrade 18` |
+| Umbraco 17 | `v17/dev` | `v17/main` | Active. Supports Umbraco 17.8.1 or later |
+| Umbraco 18 | `v18/dev` | `v18/main` | Active. Supports Umbraco 18.3.1 or later |
 | Umbraco 19 | `v19/dev` | `v19/main` | Active, not started. Umbraco 19 is at RC. Run `major-upgrade 19` after 18 |
 
 `develop` and `main` are the old v13-era branches. They are frozen and are being retired. Do not target them.

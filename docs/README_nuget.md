@@ -1,31 +1,31 @@
 # SearchSpellCheck
 
-[![Platform](https://img.shields.io/badge/Umbraco-17-%233544B1?style=flat&logo=umbraco)](https://umbraco.com/products/umbraco-cms/)
+[![Platform](https://img.shields.io/badge/Umbraco-18-%233544B1?style=flat&logo=umbraco)](https://umbraco.com/products/umbraco-cms/)
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.SearchSpellCheck?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck)
-[![GitHub](https://img.shields.io/github/license/rickbutterfield/Umbraco.Community.SearchSpellCheck?color=8AB803)](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v17/dev/LICENSE)
+[![GitHub](https://img.shields.io/github/license/rickbutterfield/Umbraco.Community.SearchSpellCheck?color=8AB803)](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v18/dev/LICENSE)
 
 ## A Lucene.Net-based spell checker for Umbraco
 
 This project wouldn't exist without [Lars-Erik Aabech](https://github.com/lars-erik) who [created a v7 version of this](https://blog.aabech.no/archive/building-a-spell-checker-for-search-in-umbraco/), which a lot of the work is based on.
 
 ## How it works
-![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/v17/dev/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
+![alt text](https://raw.githubusercontent.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/refs/heads/v18/dev/docs/screenshot.png "A search result, with a misspelt version of the word 'house'. It is being suggested to the user to instead search for the correct spelling of the word.")
 
 On startup, this extension will index all the content in your site based on the `IndexedFields` settings. On every search, the extension will check the multi-word search term against the index and suggest the most likely words to the user.
 
 ## Installation
-The Umbraco v17 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck). It requires Umbraco 17.8.1 or later (.NET 10). For Umbraco 13, use the `v13/main` branch instead.
+The Umbraco v18 version of this package is [available via NuGet](https://www.nuget.org/packages/Umbraco.Community.SearchSpellCheck). It requires Umbraco 18.3.1 or later (.NET 10). For Umbraco 13, use the `v13/main` branch instead, and for Umbraco 17, use the `v17/main` branch.
 
 To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Umbraco.Community.SearchSpellCheck --version 17.0.0-alpha
+dotnet add package Umbraco.Community.SearchSpellCheck --version 18.0.0-alpha
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Umbraco.Community.SearchSpellCheck -Version 17.0.0-alpha
+Install-Package Umbraco.Community.SearchSpellCheck -Version 18.0.0-alpha
 ```
 
 ## Configuration
@@ -45,7 +45,7 @@ The package can be configured in `appsettings.json`
 ### Settings
 `IndexName`: The name of the Lucene index to be created. This is also the name of the folder holding the index files, which Umbraco places under `umbraco/Data/TEMP/ExamineIndexes` by default. The exact location depends on your `Umbraco:CMS:Examine:LuceneDirectoryFactory` setting, so the package asks Examine where the index is rather than assuming a path. By default the name is `SpellCheckIndex` but this can be changed if you need a different naming convention.
 
-`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, Rich Text Editor, [Block Grid](https://docs.umbraco.com/umbraco-cms/17.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/17.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
+`IndexedFields`: The alias(es) of fields to be indexed. This is a comma-separated list of field names. By default only the `nodeName` field is indexed. Currently, there is support for textstring, textareas, Rich Text Editor, [Block Grid](https://docs.umbraco.com/umbraco-cms/18.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-grid-editor) and [Block List](https://docs.umbraco.com/umbraco-cms/18.latest/fundamentals/backoffice/property-editors/built-in-umbraco-property-editors/block-editor/block-list-editor?fallback=true) fields.
 
 `BuildOnStartup`: Boolean indicating if you want the index to be populated on startup. Defaults to `true`.
 
@@ -101,4 +101,4 @@ If you need the individual candidates and their scores, use `GetSuggestions`, wh
 ## License
 Copyright &copy; 2021-2025 [Rick Butterfield](https://rickbutterfield.com), and other contributors
 
-Licensed under the [MIT License](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v17/dev/LICENSE).
+Licensed under the [MIT License](https://github.com/rickbutterfield/Umbraco.Community.SearchSpellCheck/blob/v18/dev/LICENSE).
